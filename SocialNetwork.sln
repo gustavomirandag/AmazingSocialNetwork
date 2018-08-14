@@ -3,9 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Presentation", "0 - Presentation", "{0E63B76F-69FA-48C1-9E5B-DE111A7C9F4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{CBC156FB-06FD-402E-8494-7BFEC9B02A8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{5888651D-953F-404E-87D0-DADB710DA4F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infrastructure", "3 - Infrastructure", "{3DD21F9B-B74E-4564-8382-515E5BA2C85D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{045DA311-B35F-45B6-8CEE-29B1136D8E3B}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{045DA311-B35F-45B6-8CEE-29B1136D8E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{045DA311-B35F-45B6-8CEE-29B1136D8E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{045DA311-B35F-45B6-8CEE-29B1136D8E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{045DA311-B35F-45B6-8CEE-29B1136D8E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{045DA311-B35F-45B6-8CEE-29B1136D8E3B} = {CBC156FB-06FD-402E-8494-7BFEC9B02A8D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF0C9274-4C5E-4A26-9B59-DC9EDDF979FA}
