@@ -10,6 +10,7 @@ namespace DomainModel.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; } //AccountId
         public DateTime Birthday { get; set; }
         public string Photo { get; set; }
     }
