@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Data.Contexts;
+using Data.Repositories;
 using DomainModel.Entities;
 
 namespace SocialNetworkWebApp.Controllers
@@ -15,6 +16,8 @@ namespace SocialNetworkWebApp.Controllers
     public class ProfilesController : Controller
     {
         private SocialNetworkContext db = new SocialNetworkContext();
+        private DomainService.ProfileService _profileService = new DomainService.ProfileService(new ProfileRamDBRepository());
+
 
         // GET: Profiles
         public ActionResult Index()
@@ -37,7 +40,7 @@ namespace SocialNetworkWebApp.Controllers
             else
             {
                 //Obtem Profile pelo Id
-                profile = db.Profiles.Find(id);
+                profile = _profileService.GetProfile(id);
             }
 
             if (profile == null)
@@ -69,8 +72,9 @@ namespace SocialNetworkWebApp.Controllers
                 string fileUrl = await blobService.UploadImage("socialnetwork", Guid.NewGuid().ToString() + file.FileName, file.InputStream, file.ContentType);
                 profile.Photo = fileUrl;
                 //#######################################
-                db.Profiles.Add(profile);
-                db.SaveChanges();
+                //db.Profiles.Add(profile);
+                //db.SaveChanges();
+                _profileService.CreateProfile(profile);
                 return RedirectToAction("Details",profile.Id);
             }
 

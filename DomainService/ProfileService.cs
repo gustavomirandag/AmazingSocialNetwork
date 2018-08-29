@@ -1,5 +1,6 @@
 ﻿using Data.Repositories;
 using DomainModel.Entities;
+using DomainModel.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,21 @@ namespace DomainService
 {
     public class ProfileService
     {
-        public void CreateProfile(Profile profile)
+        private IProfileRepository _profileRepository;
+
+        public ProfileService(IProfileRepository profileRepository)
         {
-            var repository = new ProfileRepository();
-            repository.Create(profile);
+            _profileRepository = profileRepository;
         }
 
-        public Profile GetProfile(Guid id)
+        public void CreateProfile(Profile profile)
         {
-            var repository = new ProfileRepository();
-            return repository.Get(id);
+            _profileRepository.Create(profile);
+        }
+
+        public Profile GetProfile(Guid? id)
+        {
+            return _profileRepository.Get(id);
         }
     }
 }

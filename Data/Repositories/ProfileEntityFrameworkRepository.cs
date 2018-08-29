@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class ProfileRepository : IProfileRepository
+    public class ProfileEntityFrameworkRepository : IProfileRepository
     {
         public void Create(Profile profile)
         {
@@ -18,8 +18,10 @@ namespace Data.Repositories
             context.SaveChanges();
         }
 
-        public Profile Get(Guid id)
+        public Profile Get(Guid? id)
         {
+            if (id == null)
+                return null;
             var context = new SocialNetworkContext();
             return context.Profiles
                 .SingleOrDefault(x => x.Id == id);

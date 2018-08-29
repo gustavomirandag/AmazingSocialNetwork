@@ -64,7 +64,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\ProfileRepository.cs" />
+    <Compile Include="Repositories\ProfileEntityFrameworkRepository.cs" />
+    <Compile Include="Repositories\ProfileRamDBRepository.cs" />
+    <Compile Include="Repositories\ProfileStoredProcedureRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzureStorageService\AzureStorageService.csproj">
@@ -78,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

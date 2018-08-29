@@ -10,7 +10,7 @@ namespace DomainModel.Interfaces.Repositories
     public interface IProfileRepository
     {
         void Create(Profile profile);
-        Profile Get(Guid id);
+        Profile Get(Guid? id);
     }
 }
  
