@@ -25,10 +25,7 @@ namespace Data.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=tcp:myinfnetsocialnetwork.database.windows.net,1433;Initial Catalog=MySoci" +
-            "alNetwork;Persist Security Info=False;User ID=olivato;Password=EDSInf123;Multipl" +
-            "eActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Tim" +
-            "eout=30;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("COLOQUE AQUI SUA STRING DE CONEXÃO PARA O DOMÍNIO(SOCIAL NETWORK)")]
         public string DbConnectionString {
             get {
                 return ((string)(this["DbConnectionString"]));
