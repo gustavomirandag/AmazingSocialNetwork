@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Newtonsoft.Json.Linq;
 using SocialNetworkWebApp.Models;
 
 namespace SocialNetworkWebApp.Controllers
@@ -17,9 +20,15 @@ namespace SocialNetworkWebApp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private HttpClient _client;
 
         public AccountController()
         {
+            _client = new HttpClient();
+            //_client.BaseAddress = new Uri("https://socialnetworkwebapi.azurewebsites.net/");
+            _client.BaseAddress = new Uri("http://localhost:57074/");
+            _client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -150,6 +159,33 @@ namespace SocialNetworkWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var registerRequest = await _client.PostAsJsonAsync<RegisterViewModel>("api/account/register", model);
+
+            if (!registerRequest.IsSuccessStatusCode)
+                RedirectToAction("Index");
+
+            //Get Token and save in Session
+            //setup login data
+            var formContent = new FormUrlEncodedContent(new[]
+            {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", model.Email),
+                    new KeyValuePair<string, string>("password", model.Password),
+                });
+
+            //send request
+            HttpResponseMessage responseMessage = await _client.PostAsync("Token", formContent);
+
+            //get access token from response body
+            var responseJson = await responseMessage.Content.ReadAsStringAsync();
+            var jObject = JObject.Parse(responseJson);
+            Session["apiToken"] = jObject.GetValue("access_token").ToString();
+            Session["userEmail"] = model.Email;
+
+            return RedirectToAction("Create", "Profiles");
+
+
+            /*
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -176,6 +212,8 @@ namespace SocialNetworkWebApp.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+
+            */
         }
 
         //
@@ -396,6 +434,13 @@ namespace SocialNetworkWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult SignOut()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");

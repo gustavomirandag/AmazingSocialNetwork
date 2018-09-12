@@ -41,10 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\PhotoGallery.cs" />
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Interfaces\Repositories\IProfileRepository.cs" />
-    <Compile Include="ObjectValues\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

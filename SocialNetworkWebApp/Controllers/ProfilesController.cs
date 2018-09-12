@@ -4,43 +4,65 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Data.Contexts;
 using Data.Repositories;
 using DomainModel.Entities;
+using Utility;
 
 namespace SocialNetworkWebApp.Controllers
 {
     public class ProfilesController : Controller
     {
-        private SocialNetworkContext db = new SocialNetworkContext();
-        private DomainService.ProfileService _profileService = new DomainService.ProfileService(new ProfileRamDBRepository());
+        private HttpClient _client;
 
+        public ProfilesController()
+        {
+            _client = new HttpClient();
+            //_client.BaseAddress = new Uri("https://socialnetworkwebapi.azurewebsites.net/");
+            _client.BaseAddress = new Uri("http://localhost:57074/");
+            _client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        private void RegisterClientToken()
+        {
+            _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Session["apiToken"].ToString());
+        }
 
         // GET: Profiles
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            return View(db.Profiles.ToList());
+            RegisterClientToken();
+            return View(_client.GetAsync("api/profiles")
+                .Result.Content
+                .ReadAsAsync<IEnumerable<Profile>>().Result);
         }
 
         // GET: Profiles/Details/5
         public ActionResult Details(Guid? id)
         {
+            RegisterClientToken();
             Profile profile;
             if (id == null)
             {
                 if (Session["userEmail"] == null)
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 //Obtem Profile pelo EMAIL
-                IEnumerable<Profile> profilesList = db.Profiles;
-                profile = profilesList.SingleOrDefault(p => p.Email == Session["userEmail"].ToString());
+                profile = _client.GetAsync("api/profiles/" + Session["userEmail"].ToString().EncodeBase64())
+                    .Result.Content.ReadAsAsync<Profile>().Result;
             }
             else
             {
                 //Obtem Profile pelo Id
-                profile = _profileService.GetProfile(id);
+                profile = _client.GetAsync("api/profiles/" + id)
+                    .Result.Content.ReadAsAsync<Profile>().Result;
             }
 
             if (profile == null)
@@ -53,6 +75,7 @@ namespace SocialNetworkWebApp.Controllers
         // GET: Profiles/Create
         public ActionResult Create()
         {
+            RegisterClientToken();
             return View();
         }
 
@@ -63,6 +86,7 @@ namespace SocialNetworkWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name,Email,Birthday")] Profile profile, HttpPostedFileBase PhotoFile)
         {
+            RegisterClientToken();
             if (ModelState.IsValid)
             {
                 profile.Id = Guid.NewGuid();
@@ -74,7 +98,7 @@ namespace SocialNetworkWebApp.Controllers
                 //#######################################
                 //db.Profiles.Add(profile);
                 //db.SaveChanges();
-                _profileService.CreateProfile(profile);
+                await _client.PostAsJsonAsync<Profile>("api/profiles", profile);
                 return RedirectToAction("Details",profile.Id);
             }
 
@@ -84,11 +108,13 @@ namespace SocialNetworkWebApp.Controllers
         // GET: Profiles/Edit/5
         public ActionResult Edit(Guid? id)
         {
+            RegisterClientToken();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Profile profile = db.Profiles.Find(id);
+            Profile profile = _client.GetAsync("api/profiles/" + id)
+                .Result.Content.ReadAsAsync<Profile>().Result;
             if (profile == null)
             {
                 return HttpNotFound();
@@ -101,15 +127,14 @@ namespace SocialNetworkWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Email,Birthday,Photo")] Profile profile)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Email,Birthday,Photo")] Profile profile)
         {
+            RegisterClientToken();
             if (ModelState.IsValid)
             {
-                db.Entry(profile).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                await _client.PutAsJsonAsync<Profile>("api/profiles/" + profile.Id,profile);
             }
-            return View(profile);
+            return RedirectToAction("Details", profile.Id);
         }
 
         // GET: Profiles/Delete/5
@@ -119,7 +144,8 @@ namespace SocialNetworkWebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Profile profile = db.Profiles.Find(id);
+            Profile profile = _client.GetAsync("api/profiles/" + id)
+                .Result.Content.ReadAsAsync<Profile>().Result;
             if (profile == null)
             {
                 return HttpNotFound();
@@ -132,18 +158,26 @@ namespace SocialNetworkWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Profile profile = db.Profiles.Find(id);
-            db.Profiles.Remove(profile);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            RegisterClientToken();
+            Profile profile = null;
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var deleteResult = _client.DeleteAsync("api/profiles/" + id).Result;
+            if (deleteResult.IsSuccessStatusCode)
+                profile = deleteResult.Content.ReadAsAsync<Profile>().Result;
+
+            if (profile == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("SignOut", "Account");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

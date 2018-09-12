@@ -26,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input name="Email" readonly class="control-label col-md-2" value="@Session["userEmail"]" />
+                <input name="Email" readonly value="@Session["userEmail"]" />
             </div>
         </div>
 
