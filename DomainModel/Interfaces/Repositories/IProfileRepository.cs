@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace DomainModel.Interfaces.Repositories
 {
-    public interface IProfileRepository
+    public interface IProfileRepository : IRepository<Profile>
     {
-        void Create(Profile profile);
-        Profile Get(Guid? id);
     }
 }
  

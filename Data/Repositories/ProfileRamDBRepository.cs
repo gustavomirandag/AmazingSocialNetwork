@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class ProfileRamDBRepository : IProfileRepository
+    public class ProfileRamDBRepository : IRepository<Profile>
     {
         private static List<Profile> profiles = new List<Profile>();
 
@@ -17,9 +17,28 @@ namespace Data.Repositories
             profiles.Add(profile);
         }
 
+        public void Delete(Guid id)
+        {
+            var orignalProfile 
+                = profiles.SingleOrDefault(p => p.Id == id);
+        }
+
         public Profile Get(Guid? id)
         {
             return profiles.SingleOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Profile> GetAll()
+        {
+            return profiles;
+        }
+
+        public void Update(Profile entity)
+        {
+            var originalProfile 
+                = profiles.SingleOrDefault(p => p.Id == entity.Id);
+            profiles.Remove(originalProfile);
+            profiles.Add(entity);
         }
     }
 }

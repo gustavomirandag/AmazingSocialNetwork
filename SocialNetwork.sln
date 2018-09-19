@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkIdentityWebAPI", "SocialNetworkIdentityWebAPI\SocialNetworkIdentityWebAPI.csproj", "{07D0961C-E173-4F01-86A3-539CB3EC9908}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CountryStateWebAPI", "CountryStateWebAPI\CountryStateWebAPI.csproj", "{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{07D0961C-E173-4F01-86A3-539CB3EC9908}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D0961C-E173-4F01-86A3-539CB3EC9908}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07D0961C-E173-4F01-86A3-539CB3EC9908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{DB266D7A-BA8D-4FFF-8982-9AFD1A513C72} = {0E63B76F-69FA-48C1-9E5B-DE111A7C9F4F}
 		{838F50DC-90CE-448A-81EF-663971AE419E} = {489D0670-BB4D-40EA-8FFC-D8C36E88B77B}
 		{07D0961C-E173-4F01-86A3-539CB3EC9908} = {5888651D-953F-404E-87D0-DADB710DA4F2}
+		{B3F7D5ED-A291-413C-B5EC-22BB9FBBBB9B} = {5888651D-953F-404E-87D0-DADB710DA4F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF0C9274-4C5E-4A26-9B59-DC9EDDF979FA}

@@ -11,6 +11,7 @@ namespace Data.Repositories
 {
     public class ProfileStoredProcedureRepository : IProfileRepository
     {
+
         public void Create(Profile profile)
         {
             SqlConnection sqlConnection;
@@ -30,6 +31,11 @@ namespace Data.Repositories
             //########################################
 
             sqlConnection.Close();
+        }
+
+        public void Delete(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public Profile Get(Guid? id)
@@ -58,6 +64,16 @@ namespace Data.Repositories
 
             sqlConnection.Close();
             return profile;
+        }
+
+        public IEnumerable<Profile> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Profile entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -82,23 +82,46 @@ namespace SocialNetworkWebApp.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            //Get Token and save in Session
+            //setup login data
+            var formContent = new FormUrlEncodedContent(new[]
             {
-                case SignInStatus.Success:
-                    Session["userEmail"] = model.Email;
-                    return RedirectToAction("Details", "Profiles");
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
-            }
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", model.Email),
+                    new KeyValuePair<string, string>("password", model.Password),
+            });
+
+            //send request
+            HttpResponseMessage responseMessage = await _client.PostAsync("Token", formContent);
+
+            if (!responseMessage.IsSuccessStatusCode)
+                    RedirectToAction("Index");
+
+            //get access token from response body
+            var responseJson = await responseMessage.Content.ReadAsStringAsync();
+            var jObject = JObject.Parse(responseJson);
+            Session["apiToken"] = jObject.GetValue("access_token").ToString();
+            Session["userEmail"] = model.Email;
+
+            return RedirectToAction("Details", "Profiles");
+
+            //// This doesn't count login failures towards account lockout
+            //// To enable password failures to trigger account lockout, change to shouldLockout: true
+            //var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            //switch (result)
+            //{
+            //    case SignInStatus.Success:
+            //        Session["userEmail"] = model.Email;
+            //        return RedirectToAction("Details", "Profiles");
+            //    case SignInStatus.LockedOut:
+            //        return View("Lockout");
+            //    case SignInStatus.RequiresVerification:
+            //        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+            //    case SignInStatus.Failure:
+            //    default:
+            //        ModelState.AddModelError("", "Invalid login attempt.");
+            //        return View(model);
+            //}
         }
 
         //
@@ -171,7 +194,7 @@ namespace SocialNetworkWebApp.Controllers
                     new KeyValuePair<string, string>("grant_type", "password"),
                     new KeyValuePair<string, string>("username", model.Email),
                     new KeyValuePair<string, string>("password", model.Password),
-                });
+            });
 
             //send request
             HttpResponseMessage responseMessage = await _client.PostAsync("Token", formContent);

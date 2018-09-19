@@ -9,22 +9,11 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class ProfileEntityFrameworkRepository : IProfileRepository
+    public class ProfileEntityFrameworkRepository : RepositoryBase<Profile>
     {
-        public void Create(Profile profile)
+        public ProfileEntityFrameworkRepository(SocialNetworkContext context)
+            :base(context)
         {
-            var context = new SocialNetworkContext();
-            context.Profiles.Add(profile);
-            context.SaveChanges();
-        }
-
-        public Profile Get(Guid? id)
-        {
-            if (id == null)
-                return null;
-            var context = new SocialNetworkContext();
-            return context.Profiles
-                .SingleOrDefault(x => x.Id == id);
         }
     }
 }
