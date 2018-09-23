@@ -35,7 +35,7 @@ namespace SocialNetworkWebApp.Controllers
         }
 
         // GET: Profiles
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             RegisterClientToken();
@@ -63,6 +63,21 @@ namespace SocialNetworkWebApp.Controllers
                 //Obtem Profile pelo Id
                 profile = _client.GetAsync("api/profiles/" + id)
                     .Result.Content.ReadAsAsync<Profile>().Result;
+
+                //FOLLOWS (pessoas que sigo ou posso seguir)
+                //Verifico se não estou olhando o meu próprio perfil
+                if (profile.Email != Session["userEmail"].ToString())
+                {
+                    //Pego o MEU perfil (MY PROFILE)
+                    Profile myProfile = _client.GetAsync("api/profiles/" + Session["userEmail"].ToString().EncodeBase64())
+                    .Result.Content.ReadAsAsync<Profile>().Result;
+
+                    //Verifico se já sou amigo dessa pessoa sigo essa pessoa
+                    IEnumerable<Profile> friends = _client.GetAsync("api/Friendships/" + myProfile.Id)
+                    .Result.Content.ReadAsAsync<IEnumerable<Profile>>().Result;
+                    bool isMyFriend = friends.Any(p => p.Id == profile.Id);
+                    ViewBag.isMyFriend = isMyFriend;
+                }
             }
 
             if (profile == null)
@@ -77,6 +92,50 @@ namespace SocialNetworkWebApp.Controllers
         {
             RegisterClientToken();
             return View();
+        }
+
+        public async Task<ActionResult> CreateFriendshipWith(Guid id)
+        {
+            RegisterClientToken();
+
+            //Pego o MEU perfil (MY PROFILE)
+            Profile myProfile = _client.GetAsync("api/profiles/" + Session["userEmail"].ToString().EncodeBase64())
+            .Result.Content.ReadAsAsync<Profile>().Result;
+
+            //Obtenho referência a pessoa que será meu novo amigo
+            Profile newFriend = _client.GetAsync("api/profiles/" + id)
+            .Result.Content.ReadAsAsync<Profile>().Result;
+
+            //Crio a amizade
+            Friendship friendship = new Friendship();
+            friendship.Id = Guid.NewGuid();
+            friendship.ProfileA = myProfile;
+            friendship.ProfileB = newFriend;
+            await _client.PostAsJsonAsync<Friendship>("api/friendships/", friendship);
+
+            return RedirectToAction("Details", newFriend.Id);
+        }
+
+        public async Task<ActionResult> RemoveFriendshipWith(Guid id)
+        {
+            RegisterClientToken();
+
+            //Pego o MEU perfil (MY PROFILE)
+            Profile myProfile = _client.GetAsync("api/profiles/" + Session["userEmail"].ToString().EncodeBase64())
+            .Result.Content.ReadAsAsync<Profile>().Result;
+
+            //Obtenho referência a pessoa que não será mais meu amigo
+            Profile exFriend = _client.GetAsync("api/profiles/" + id)
+            .Result.Content.ReadAsAsync<Profile>().Result;
+
+            //Removo a amizade
+            Friendship friendship = new Friendship();
+            friendship.Id = Guid.NewGuid();
+            friendship.ProfileA = myProfile;
+            friendship.ProfileB = exFriend;
+            await _client.DeleteAsync($"api/friendships?profileId={myProfile.Id}&exFriendId={exFriend.Id}");
+
+            return RedirectToAction("Details", exFriend.Id);
         }
 
         // POST: Profiles/Create

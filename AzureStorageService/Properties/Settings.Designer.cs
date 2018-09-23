@@ -25,7 +25,7 @@ namespace AzureStorageService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COLOQUE AQUI SUA STRING DE CONEXÃO PARA O STORAGE DO AZURE")]
+        [global::System.Configuration.DefaultSettingValueAttribute("COLOQUE AQUI SUA STRING DE CONEXÃO")]
         public string StorageConnectionString {
             get {
                 return ((string)(this["StorageConnectionString"]));

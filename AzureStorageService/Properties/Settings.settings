@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="StorageConnectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">COLOQUE AQUI SUA STRING DE CONEXÃO PARA O STORAGE DO AZURE</Value>
+      <Value Profile="(Default)">COLOQUE AQUI SUA STRING DE CONEXÃO</Value>
     </Setting>
   </Settings>
 </SettingsFile>

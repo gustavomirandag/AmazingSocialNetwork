@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Data.Contexts;
 using Data.Repositories;
+using Data.Repositories.ProfileRepositories;
 using DomainModel.Entities;
 using Utility;
 
@@ -19,12 +20,13 @@ namespace SocialNetworkIdentityWebAPI.Controllers
     public class ProfilesController : ApiController
     {
         private SocialNetworkContext db = new SocialNetworkContext();
-        private DomainService.ProfileService _profileService = new DomainService.ProfileService(new ProfileStoredProcedureRepository());
+        private DomainService.ProfileService _profileService = new DomainService.ProfileService(new ProfileEntityFrameworkRepository(new SocialNetworkContext()));
 
         // GET: api/Profiles
         public IEnumerable<Profile> GetProfiles()
         {
-            return db.Profiles;
+            var profiles = _profileService.GetAllProfiles();
+            return profiles;
         }
 
         // GET: api/Profiles/5
@@ -75,7 +77,7 @@ namespace SocialNetworkIdentityWebAPI.Controllers
                 return BadRequest();
             }
 
-            db.Entry(profile).State = EntityState.Modified;
+            _profileService.UpdateProfile(profile);
 
             try
             {

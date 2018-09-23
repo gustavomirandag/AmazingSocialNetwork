@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public abstract class RepositoryBase<T> : IRepository<T> where T : EntityBase
+    public abstract class EntityFrameworkRepositoryBase<T> : IRepository<T> where T : EntityBase
     {
         private readonly SocialNetworkContext _context;
-        public RepositoryBase()
-        {
-        }
-        public RepositoryBase(SocialNetworkContext socialNetworkContext)
+
+        public EntityFrameworkRepositoryBase(SocialNetworkContext socialNetworkContext)
         {
             _context = socialNetworkContext;
         }
@@ -23,6 +21,7 @@ namespace Data.Repositories
         public virtual void Create(T entity)
         {
             _context.Set<T>().Add(entity);
+            _context.SaveChanges();
         }
 
         public virtual void Delete(Guid id)
@@ -46,9 +45,9 @@ namespace Data.Repositories
 
         public virtual void Update(T entity)
         {
-            _context.Entry<T>(entity).State 
-                = System.Data.Entity
-                .EntityState.Modified;
+            var originalEntity = _context.Set<T>().SingleOrDefault(e => e.Id == entity.Id);
+            _context.Set<T>().Remove(originalEntity);
+            _context.Set<T>().Add(entity);
             _context.SaveChanges();
         }
     }

@@ -39,9 +39,22 @@
         </dt>
 
         <dd>
-            <img src="@Model.Photo" style="max-width:200px;height:auto;"/>
+            <img src="@Model.Photo" style="max-width:200px;height:auto;" />
         </dd>
 
+        <dd>
+            @if (ViewBag.isMyFriend != null)
+            {
+                if (ViewBag.isMyFriend == true)
+                {
+                    @Html.ActionLink("Unfriend", "RemoveFriendshipWith", new { id = Model.Id })
+                }
+                else
+                {
+                    @Html.ActionLink("Friend", "CreateFriendshipWith", new { id = Model.Id })
+                }
+            }
+        </dd>
     </dl>
 </div>
 <p>

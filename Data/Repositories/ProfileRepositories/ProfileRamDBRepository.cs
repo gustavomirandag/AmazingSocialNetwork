@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Repositories
+namespace Data.Repositories.ProfileRepositories
 {
     public class ProfileRamDBRepository : IRepository<Profile>
     {

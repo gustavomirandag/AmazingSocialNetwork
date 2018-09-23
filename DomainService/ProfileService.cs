@@ -27,5 +27,20 @@ namespace DomainService
         {
             return _profileRepository.Get(id);
         }
+
+        public IEnumerable<Profile> GetAllProfiles()
+        {
+            return _profileRepository.GetAll();
+        }
+
+        public void RemoveProfile(Guid id)
+        {
+            _profileRepository.Delete(id);
+        }
+
+        public void UpdateProfile(Profile profile)
+        {
+            _profileRepository.Update(profile);
+        }
     }
 }

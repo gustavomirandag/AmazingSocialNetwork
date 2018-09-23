@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,7 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Friendship.cs" />
+    <Compile Include="Entities\Photo.cs" />
+    <Compile Include="Entities\PhotoAlbum.cs" />
     <Compile Include="Entities\Profile.cs" />
+    <Compile Include="Interfaces\Repositories\IFriendshipRepository.cs" />
     <Compile Include="Interfaces\Repositories\IProfileRepository.cs" />
     <Compile Include="Interfaces\Repositories\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

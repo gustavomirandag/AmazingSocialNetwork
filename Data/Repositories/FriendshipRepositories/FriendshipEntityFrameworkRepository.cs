@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Repositories
+namespace Data.Repositories.FriendshipRepositories
 {
-    public class ProfileEntityFrameworkRepository : RepositoryBase<Profile>
+    public class FriendshipEntityFrameworkRepository : EntityFrameworkRepositoryBase<Friendship>, IFriendshipRepository
     {
-        public ProfileEntityFrameworkRepository(SocialNetworkContext context)
+        public FriendshipEntityFrameworkRepository(SocialNetworkContext context)
             :base(context)
         {
         }

@@ -12,6 +12,5 @@ namespace DomainModel.Entities
         public string Email { get; set; } //AccountId
         public DateTime Birthday { get; set; }
         public string Photo { get; set; }
-        public virtual ICollection<Profile> Follows { get; set; }
     }
 }
