@@ -25,7 +25,9 @@ namespace AzureStorageService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COLOQUE AQUI SUA STRING DE CONEXÃO")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DefaultEndpointsProtocol=https;AccountName=socialnetworkstorage;AccountKey=ajQndr" +
+            "RRUrvRaMdVSecg6QUsbBKxrgqZxPz+bcM1YzCz/8rCtuqA5lEYcdiwSd/rjzG57hsr5fIAaOaVLxgATg" +
+            "==;EndpointSuffix=core.windows.net")]
         public string StorageConnectionString {
             get {
                 return ((string)(this["StorageConnectionString"]));

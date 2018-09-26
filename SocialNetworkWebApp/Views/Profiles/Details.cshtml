@@ -55,6 +55,18 @@
                 }
             }
         </dd>
+        @if (ViewBag.Friends != null)
+        {
+            <dt>
+                Profile Friends
+            </dt>
+            foreach (var friend in ViewBag.Friends)
+            {
+                <dd>
+                    <a href="~/profiles/details/@friend.Id"><img src="@friend.Photo" style="max-width:100px;height:auto;" /></a>
+                </dd>
+            }
+        }
     </dl>
 </div>
 <p>

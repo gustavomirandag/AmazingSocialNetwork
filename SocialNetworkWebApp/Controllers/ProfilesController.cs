@@ -57,6 +57,7 @@ namespace SocialNetworkWebApp.Controllers
                 //Obtem Profile pelo EMAIL
                 profile = _client.GetAsync("api/profiles/" + Session["userEmail"].ToString().EncodeBase64())
                     .Result.Content.ReadAsAsync<Profile>().Result;
+                id = profile.Id;
             }
             else
             {
@@ -79,6 +80,11 @@ namespace SocialNetworkWebApp.Controllers
                     ViewBag.isMyFriend = isMyFriend;
                 }
             }
+
+            //Apresento os amigos independente de ser eu ou outro perfil
+            IEnumerable<Profile> profileFriends = _client.GetAsync("api/Friendships/" + id)
+                .Result.Content.ReadAsAsync<IEnumerable<Profile>>().Result;
+            ViewBag.Friends = profileFriends;
 
             if (profile == null)
             {
